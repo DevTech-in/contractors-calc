@@ -1001,22 +1001,22 @@ export class AppComponent {
     }
   }
 
-  calculateRates(item: TenderItem) {
-    item.fullRate = item.quantity * item.estimateRate;
-    item.contractorRate = item.fullRate - (item.fullRate * this.percentage / 100);
-  }
+  // calculateRates(item: TenderItem) {
+  //   item.fullRate = item.quantity * item.estimateRate;
+  //   item.contractorRate = item.fullRate - (item.fullRate * this.percentage / 100);
+  // }
 
-  updateAllContractorRates() {
-    this.items.forEach(item => {
-      item.contractorRate = item.fullRate - (item.fullRate * this.percentage / 100);
-    });
-  }
+  // updateAllContractorRates() {
+  //   this.items.forEach(item => {
+  //     item.contractorRate = item.fullRate - (item.fullRate * this.percentage / 100);
+  //   });
+  // }
 
-  getDifferenceText(item: TenderItem): string {
-    const diff = item.fullRate - item.contractorRate;
-    const sign = diff >= 0 ? '-' : '+';
-    return `${sign}₹${Math.abs(diff).toFixed(2)}`;
-  }
+  // getDifferenceText(item: TenderItem): string {
+  //   const diff = item.fullRate - item.contractorRate;
+  //   const sign = diff >= 0 ? '-' : '+';
+  //   return `${sign}₹${Math.abs(diff).toFixed(2)}`;
+  // }
 
   getDiffClass(): string {
     return this.percentage >= 0 ? 'positive' : 'negative';
@@ -1026,16 +1026,56 @@ export class AppComponent {
     return this.items.reduce((sum, item) => sum + item.fullRate, 0);
   }
 
+  // getTotalContractorRate(): number {
+  //   return this.items.reduce((sum, item) => sum + item.contractorRate, 0);
+  // }
+
+  // getTotalDifference(): string {
+  //   const totalFull = this.getTotalFullRate();
+  //   const totalContractor = this.getTotalContractorRate();
+  //   const diff = totalFull - totalContractor;
+  //   const sign = diff >= 0 ? '-' : '+';
+  //   return `${sign}₹${Math.abs(diff).toFixed(2)}`;
+  // }
+
+
+  calculateRates(item: TenderItem) {
+    item.fullRate = item.quantity * item.estimateRate;
+    item.contractorRate = item.estimateRate - (item.estimateRate * this.percentage / 100);
+  }
+
+
+  updateAllContractorRates() {
+    this.items.forEach(item => {
+      item.contractorRate = item.estimateRate - (item.estimateRate * this.percentage / 100);
+    });
+  }
+
+  getDifferenceText(item: TenderItem): string {
+    const diff = item.quantity * item.contractorRate;
+    const sign = diff >= 0 ? '-' : '+';
+    return `${sign}₹${Math.abs(diff).toFixed(2)}`;
+  }
+
+  getDiffClassCopy(): string {
+    return this.percentage >= 0 ? 'positive' : 'negative';
+  }
+
   getTotalContractorRate(): number {
-    return this.items.reduce((sum, item) => sum + item.contractorRate, 0);
+    // return 
+    let data = this.items.reduce((sum, item) => sum + item.contractorRate, 0);
+    return data;
   }
 
   getTotalDifference(): string {
-    const totalFull = this.getTotalFullRate();
-    const totalContractor = this.getTotalContractorRate();
-    const diff = totalFull - totalContractor;
-    const sign = diff >= 0 ? '-' : '+';
-    return `${sign}₹${Math.abs(diff).toFixed(2)}`;
+    // const totalFull = this.getTotalFullRate();
+    // const totalContractor = this.getTotalContractorRate();
+    let data = this.items.reduce((sum, item) => sum + (item.contractorRate * item.quantity), 0);
+    console.log("Data2: ", data);
+    // const diff = totalFull - totalContractor;
+    //const sign = diff >= 0 ? '-' : '+';
+    const sign = data >= 0 ? '-' : '+';
+    return `${sign}₹${Math.abs(data).toFixed(2)}`;
   }
 }
 
